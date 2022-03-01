@@ -944,6 +944,7 @@ switch($Action)
             }
             else
             {
+                Write-Output "[-] File not found"
                 $output_message = "[-] File not found"
                 $startup_error = $true
             }
@@ -2226,9 +2227,11 @@ if($client.Connected -or (!$startup_error -and $inveigh.session_socket_table[$se
 
                             if(!$Modify)
                             {
-                                $file_last_write_time = $file_last_write_time.PadLeft(19,0)
+                                # $file_last_write_time = $file_last_write_time.PadLeft(19,0)
+                                $file_last_write_time = $file_last_write_time
                                 [String]$SMB_file_length = $SMB_file_length
-                                $SMB_file_length = $SMB_file_length.PadLeft(15,0)
+                                # $SMB_file_length = $SMB_file_length.PadLeft(15,0)
+                                $SMB_file_length = $SMB_file_length
                             }
 
                             if($SMB_file_attributes.Substring(11,1) -eq '1')
@@ -2302,18 +2305,20 @@ if($client.Connected -or (!$startup_error -and $inveigh.session_socket_table[$se
 
                             if($directory_contents_hide_headers)
                             {
-                                ($directory_contents_output | Format-Table -Property @{ Name="Mode"; Expression={$_.Mode }; Alignment="left"; },
+                                Write-Output $directory_contents_output | Format-Table -AutoSize
+                                <#(Write-Output $directory_contents_output | Format-Table -Property @{ Name="Mode"; Expression={$_.Mode }; Alignment="left"; },
                                                                             @{ Name="LastWriteTime"; Expression={$_.LastWriteTime }; Alignment="right"; },
                                                                             @{ Name="Length"; Expression={$_.Length }; Alignment="right"; },
-                                                                            @{ Name="Name"; Expression={$_.Name }; Alignment="left"; } -AutoSize -HideTableHeaders -Wrap| Out-String).Trim()
+                                                                            @{ Name="Name"; Expression={$_.Name }; Alignment="left"; } -AutoSize -HideTableHeaders -Wrap| Out-String).Trim()#>
                             }
                             else
                             {
                                 $directory_contents_hide_headers = $true
-                                ($directory_contents_output | Format-Table -Property @{ Name="Mode"; Expression={$_.Mode }; Alignment="left"; },
+                                Write-Output $directory_contents_output | Format-Table -AutoSize
+                                <# (Write-Output $directory_contents_output | Format-Table -Property @{ Name="Mode"; Expression={$_.Mode }; Alignment="left"; },
                                                                             @{ Name="LastWriteTime"; Expression={$_.LastWriteTime }; Alignment="right"; },
                                                                             @{ Name="Length"; Expression={$_.Length }; Alignment="right"; },
-                                                                            @{ Name="Name"; Expression={$_.Name }; Alignment="left"; } -AutoSize -Wrap| Out-String).Trim()
+                                                                            @{ Name="Name"; Expression={$_.Name }; Alignment="left"; } -AutoSize -Wrap| Out-String).Trim()#>
                             }
 
                         }
